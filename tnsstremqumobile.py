@@ -283,6 +283,34 @@ def main():
             margin-bottom: 8px;
         }
 
+        .video-label {
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            font-size: .98rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 640px) {
+            .video-label {
+                min-height: 48px;
+                font-size: .9rem;
+            }
+            [data-testid="stHorizontalBlock"]:has(.video-label) {
+                flex-direction: row !important;
+                align-items: center !important;
+            }
+            [data-testid="stHorizontalBlock"]:has(.video-label) > div:first-child {
+                flex: 0 0 28% !important;
+                width: 28% !important;
+            }
+            [data-testid="stHorizontalBlock"]:has(.video-label) > div:last-child {
+                flex: 1 1 72% !important;
+                width: 72% !important;
+            }
+        }
+
         /* Jangan biarkan kolom memaksa horizontal scroll */
         [data-testid="stHorizontalBlock"] {
             width: 100% !important;
@@ -348,11 +376,11 @@ def main():
     )
 
     st.markdown(
-        '<h1><a href="https://www.youtube.com/@thexextsolutionid?sub_confirmation=1" target="_blank" style="text-decoration:none;">STREMQU by TNS</a></h1>',
+        '<h1><a href="https://www.youtube.com/@thexextsolutionid?sub_confirmation=1" target="_blank" style="text-decoration:none;">STREMQU MOBILE by TNS</a></h1>',
         unsafe_allow_html=True
     )
     st.markdown(
-        '<h4>Tools live streaming YouTube pribadi tanpa habiskan kuota, sewa RDP, VPS dll.</h4>',
+        '<h4>Live Streaming Langsung dari Galeri HP tanpa habiskan kuota.</h4>',
         unsafe_allow_html=True
     )
 
@@ -377,22 +405,23 @@ def main():
             height=300
         )
 
-    st.markdown("### 1. UPLOAD VIDEO / PLAYLIST")
-    st.caption("Minimal 1 video • Maksimal 3 video • Video diputar berurutan.")
-    st.info("📱 Pilih video dari galeri HP • Maksimal 300 MB per video")
+    st.markdown("### Upload Video / Playlist")
+    st.caption("1–3 video • Maksimal 300 MB per video • Diputar berurutan")
 
     selected_paths = []
 
     for slot in range(1, 4):
-        st.markdown(f'<div class="mobile-card"><div class="source-title">🎬 Video {slot}</div></div>', unsafe_allow_html=True)
-
-        uploaded_file = st.file_uploader(
-            f"Upload Video {slot} dari Galeri HP",
-            type=["mp4", "flv", "mov", "mkv", "webm"],
-            label_visibility="collapsed",
-            key=f"video_uploader_{slot}",
-            help=f"Video {slot}. Maksimal 300 MB.",
-        )
+        video_col, upload_col = st.columns([0.28, 0.72], gap="small")
+        with video_col:
+            st.markdown(f'<div class="video-label">🎬 Video {slot}</div>', unsafe_allow_html=True)
+        with upload_col:
+            uploaded_file = st.file_uploader(
+                f"Pilih Video {slot} dari Galeri HP",
+                type=["mp4", "flv", "mov", "mkv", "webm"],
+                label_visibility="collapsed",
+                key=f"video_uploader_{slot}",
+                help=f"Video {slot}. Maksimal 300 MB.",
+            )
         if uploaded_file is not None:
             if uploaded_file.size > 300 * 1024 * 1024:
                 st.error(f"Video {slot} melebihi batas 300 MB.")
