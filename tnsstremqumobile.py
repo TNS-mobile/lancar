@@ -413,17 +413,13 @@ def main():
     for slot in range(1, 4):
         with st.container():
             st.markdown(f'<div class="mobile-card">', unsafe_allow_html=True)
-            video_col, upload_col = st.columns([0.30, 0.70], gap="small")
-            with video_col:
-                st.markdown(f'<div class="video-label">🎬 Video {slot}</div>', unsafe_allow_html=True)
-            with upload_col:
-                uploaded_file = st.file_uploader(
-                    "Upload dari Galeri HP",
-                    type=["mp4", "flv", "mov", "mkv", "webm"],
-                    label_visibility="collapsed",
-                    key=f"video_uploader_{slot}",
-                    help="Maksimal 300 MB per video.",
-                )
+            uploaded_file = st.file_uploader(
+                f"Upload Video {slot}",
+                type=["mp4", "flv", "mov", "mkv", "webm"],
+                label_visibility="visible",
+                key=f"video_uploader_{slot}",
+                help="Maksimal 300 MB per video.",
+            )
             st.markdown('</div>', unsafe_allow_html=True)
 
         if uploaded_file is not None:
