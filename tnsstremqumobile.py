@@ -191,9 +191,11 @@ THEME_CSS = """
     --panel: #0c0c0c;
     --panel-2: #141414;
     --line: #2a2a2a;
-    --red: #e50914;
-    --red-dark: #8f0610;
-    --red-soft: rgba(229, 9, 20, .14);
+    --red: #e11d48;
+    --red-light: #fb3d65;
+    --red-hover: #f43f5e;
+    --red-dark: #9f1239;
+    --red-soft: rgba(225, 29, 72, .16);
     --text: #f5f5f5;
     --muted: #9a9a9a;
     --radius: 14px;
@@ -228,8 +230,9 @@ h1 {
     padding-bottom: .55rem !important;
     border-bottom: 3px solid var(--red);
 }
-h1 a { color: var(--text) !important; text-decoration: none !important; }
-h1 a:hover { color: var(--red) !important; }
+h1, h1 a, h1 span { color: var(--red-light) !important; }
+h1 a { text-decoration: none !important; }
+h1 a:hover { color: var(--red-hover) !important; }
 h4 {
     font-size: clamp(.92rem, 3.2vw, 1.05rem) !important;
     line-height: 1.45 !important;
@@ -307,7 +310,7 @@ div[data-testid="stButton"] button:active { transform: scale(.98); }
     color: #fff !important;
 }
 [data-testid="stHorizontalBlock"] > div:nth-child(1) div[data-testid="stButton"] button:hover:not(:disabled) {
-    background: #ff1e2b !important;
+    background: var(--red-hover) !important;
 }
 /* Hentikan: outline merah */
 [data-testid="stHorizontalBlock"] > div:nth-child(2) div[data-testid="stButton"] button {
@@ -378,7 +381,7 @@ button:focus-visible, input:focus-visible {
     border-left: 4px solid var(--red);
     border-radius: var(--radius);
     padding: .75rem .9rem;
-    color: #ff6b73 !important;
+    color: #fda4af !important;
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
     font-size: .78rem !important;
     line-height: 1.45;
@@ -452,7 +455,7 @@ def main():
         unsafe_allow_html=True
     )
     st.markdown(
-        '<h4>Live Streaming Langsung dari Galeri HP tanpa habiskan kuota.</h4>',
+        '<h4>Live Streaming Langsung dari Galeri HP tanpa habiskan kuota / VPS/ RDP & Sewa Bulanan.</h4>',
         unsafe_allow_html=True
     )
 
@@ -478,7 +481,7 @@ def main():
             height=300
         )
 
-    st.markdown("### UPLOAD VIDEO / PLAYLIST")
+    st.markdown("### 1. UPLOAD VIDEO / PLAYLIST")
     st.caption("Minimal 1 video • Maksimal 3 video • Maks. 300 MB per video")
 
     selected_paths = []
