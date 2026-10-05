@@ -507,13 +507,7 @@ def main():
     )
 
     st.markdown("### 3. TAMPILAN STREAMING")
-    display_mode = st.selectbox(
-        "Tampilan",
-        ["Horizontal / Landscape (16:9)", "Vertikal / Portrait / Shorts (9:16)"],
-        index=0,
-        label_visibility="collapsed",
-    )
-    is_shorts = display_mode.startswith("Vertikal")
+    is_shorts = st.checkbox("Tampilkan Vertikal / Shorts (9:16)")
 
     # Streaming selalu Tanpa batas. Tidak ada menu jumlah pengulangan/durasi.
     playback_mode = "Tanpa batas"
