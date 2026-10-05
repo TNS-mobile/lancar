@@ -205,79 +205,142 @@ def main():
         """
         <style>
         /* =========================
-           MOBILE FRIENDLY
+           STREMQU — RESPONSIVE UI
            ========================= */
+        :root { --radius: 14px; }
+
         .block-container {
-            max-width: 900px;
-            padding-top: 1rem;
-            padding-left: 1rem;
-            padding-right: 1rem;
+            width: 100% !important;
+            max-width: 920px !important;
+            margin: 0 auto !important;
+            padding: 1rem 1rem 2.5rem !important;
         }
 
+        h1 {
+            font-size: clamp(1.65rem, 5vw, 2.25rem) !important;
+            line-height: 1.15 !important;
+            margin-bottom: .35rem !important;
+        }
+        h4 {
+            font-size: clamp(.95rem, 3vw, 1.1rem) !important;
+            line-height: 1.45 !important;
+            margin-top: 0 !important;
+        }
+        h2, h3 { line-height: 1.25 !important; }
+
+        /* Semua input nyaman disentuh di HP */
+        input, textarea, button,
+        [data-baseweb="select"] > div,
         [data-testid="stFileUploaderDropzone"] {
-            border-radius: 12px;
-            padding: 10px;
+            border-radius: var(--radius) !important;
         }
 
+        input, textarea { font-size: 16px !important; }
+
+        div[data-testid="stButton"] button,
+        div[data-testid="stDownloadButton"] button {
+            width: 100%;
+            min-height: 48px;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        /* Upload area */
+        [data-testid="stFileUploader"] {
+            width: 100%;
+        }
+        [data-testid="stFileUploaderDropzone"] {
+            min-height: 88px;
+            padding: 14px !important;
+            border: 1px dashed #9ca3af !important;
+        }
         [data-testid="stFileUploaderDropzone"] [data-testid="stFileUploaderDropzoneInstructions"],
         [data-testid="stFileUploaderDropzone"] small {
             display: none !important;
         }
-
         [data-testid="stFileUploaderDropzone"]::after {
-            content: "Maksimal 300 MB per video";
+            content: "📱 Pilih video dari galeri HP • Maks. 300 MB";
             display: block;
-            margin-top: 4px;
-            font-size: 0.82rem;
+            margin-top: 5px;
+            font-size: .82rem;
+            line-height: 1.3;
             color: #6b7280;
             text-align: center;
         }
 
         .mobile-card {
             border: 1px solid #e5e7eb;
-            border-radius: 14px;
+            border-radius: 16px;
             padding: 12px;
-            margin: 8px 0 14px 0;
-            background: rgba(255,255,255,.02);
+            margin: 10px 0 14px;
+            background: rgba(255,255,255,.03);
+            box-shadow: 0 1px 5px rgba(0,0,0,.04);
         }
-
         .source-title {
             font-size: 1rem;
-            font-weight: 700;
-            margin-bottom: 6px;
+            font-weight: 750;
+            line-height: 1.25;
+            margin-bottom: 8px;
         }
 
-        div[data-testid="stButton"] button,
-        div[data-testid="stDownloadButton"] button {
-            min-height: 44px;
-            border-radius: 10px;
+        /* Jangan biarkan kolom memaksa horizontal scroll */
+        [data-testid="stHorizontalBlock"] {
+            width: 100% !important;
+            gap: .65rem !important;
+        }
+        [data-testid="stHorizontalBlock"] > div {
+            min-width: 0 !important;
+        }
+
+        /* Expander / info / success lebih rapat */
+        [data-testid="stExpander"],
+        [data-testid="stAlert"] {
+            border-radius: var(--radius) !important;
         }
 
         @media (max-width: 640px) {
             .block-container {
-                padding: .75rem .65rem 2rem .65rem;
+                max-width: 100% !important;
+                padding: .65rem .55rem 2rem !important;
             }
 
-            h1 {
-                font-size: 1.65rem !important;
-                line-height: 1.2 !important;
-            }
+            h1 { font-size: 1.55rem !important; }
+            h4 { font-size: .93rem !important; }
+            h2 { font-size: 1.2rem !important; }
+            h3 { font-size: 1.05rem !important; }
 
-            h2, h3 {
-                line-height: 1.25 !important;
-            }
-
-            [data-testid="stHorizontalBlock"] {
-                gap: .45rem;
-            }
-
-            [data-testid="stRadio"] label {
-                font-size: .92rem !important;
+            [data-testid="stMarkdownContainer"] p,
+            [data-testid="stCaptionContainer"] {
+                font-size: .9rem;
             }
 
             .mobile-card {
                 padding: 10px;
+                margin: 8px 0 10px;
             }
+
+            /* Tombol aksi menjadi vertikal di HP */
+            [data-testid="stHorizontalBlock"]:has(div[data-testid="stButton"]) {
+                flex-direction: column !important;
+            }
+            [data-testid="stHorizontalBlock"]:has(div[data-testid="stButton"]) > div {
+                width: 100% !important;
+                flex: 1 1 100% !important;
+            }
+
+            div[data-testid="stButton"] button {
+                min-height: 50px;
+            }
+
+            [data-testid="stFileUploaderDropzone"] {
+                min-height: 82px;
+                padding: 10px !important;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .block-container { padding-left: .4rem !important; padding-right: .4rem !important; }
+            h1 { font-size: 1.4rem !important; }
         }
         </style>
         """,
@@ -285,7 +348,7 @@ def main():
     )
 
     st.markdown(
-        '<h1><a href="https://www.youtube.com/@thexextsolutionid?sub_confirmation=1" target="_blank" style="text-decoration:none;">STREMQU by TNS</a></h1>',
+        '<h1><a href="https://www.youtube.com/@thexextsolutionid?sub_confirmation=1" target="_blank" style="text-decoration:none;">STREMQU MOBILE by TNS</a></h1>',
         unsafe_allow_html=True
     )
     st.markdown(
@@ -316,7 +379,7 @@ def main():
 
     st.markdown("### 1. UPLOAD VIDEO / PLAYLIST")
     st.caption("Minimal 1 video • Maksimal 3 video • Video diputar berurutan dan otomatis Tanpa batas.")
-    st.info("📱 Upload video dari galeri HP • Maksimal 300 MB per video")
+    st.info("📱 Pilih video dari galeri HP • Maksimal 300 MB per video")
 
     selected_paths = []
 
