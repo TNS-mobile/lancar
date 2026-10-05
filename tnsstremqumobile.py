@@ -264,22 +264,6 @@ input, textarea { font-size: 16px !important; color: var(--text) !important; }
 input::placeholder { color: #6b6b6b !important; }
 
 /* ---------- Radio ---------- */
-[data-testid="stRadio"] > div { gap: .5rem !important; flex-wrap: wrap; }
-[data-testid="stRadio"] label {
-    background: var(--panel-2);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: .65rem .9rem !important;
-    min-height: 48px;
-    align-items: center;
-    flex: 1 1 240px;
-}
-[data-testid="stRadio"] label:has(input:checked) {
-    border-color: var(--red);
-    background: var(--red-soft);
-}
-[data-testid="stRadio"] [data-baseweb="radio"] > div:first-child { border-color: var(--red) !important; }
-[data-testid="stRadio"] input:checked + div { background-color: var(--red) !important; }
 
 /* ---------- Checkbox ---------- */
 [data-testid="stCheckbox"] label { min-height: 44px; align-items: center; }
@@ -416,7 +400,6 @@ button:focus-visible, input:focus-visible {
     div[data-testid="stButton"] button { min-height: 54px; }
 
     [data-testid="stFileUploaderDropzone"] { min-height: 82px; padding: 10px !important; }
-    [data-testid="stRadio"] label { flex: 1 1 100%; }
 }
 
 @media (max-width: 380px) {
@@ -524,14 +507,13 @@ def main():
     )
 
     st.markdown("### 3. TAMPILAN STREAMING")
-    display_mode = st.radio(
-        "Pilih tampilan streaming",
-        ["Mode Horizontal / Landscape (16:9)", "Mode Vertikal / Portrait / Shorts (9:16)"],
+    display_mode = st.selectbox(
+        "Tampilan",
+        ["Horizontal / Landscape (16:9)", "Vertikal / Portrait / Shorts (9:16)"],
         index=0,
-        horizontal=True,
         label_visibility="collapsed",
     )
-    is_shorts = display_mode.startswith("Mode Vertikal")
+    is_shorts = display_mode.startswith("Vertikal")
 
     # Streaming selalu Tanpa batas. Tidak ada menu jumlah pengulangan/durasi.
     playback_mode = "Tanpa batas"
