@@ -184,6 +184,250 @@ def stop_ffmpeg():
         FFMPEG_PROCESS = None
 
 
+THEME_CSS = """
+<style>
+:root {
+    --bg: #000000;
+    --panel: #0c0c0c;
+    --panel-2: #141414;
+    --line: #2a2a2a;
+    --red: #e50914;
+    --red-dark: #8f0610;
+    --red-soft: rgba(229, 9, 20, .14);
+    --text: #f5f5f5;
+    --muted: #9a9a9a;
+    --radius: 14px;
+}
+
+/* ---------- Dasar halaman ---------- */
+html, body, .stApp, [data-testid="stAppViewContainer"] {
+    background: var(--bg) !important;
+    color: var(--text) !important;
+}
+[data-testid="stHeader"] { background: transparent !important; }
+[data-testid="stToolbar"], #MainMenu, footer { visibility: hidden; }
+
+.block-container {
+    width: 100% !important;
+    max-width: 760px !important;
+    margin: 0 auto !important;
+    padding: 1rem 1rem calc(2.5rem + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+/* ---------- Teks ---------- */
+h1, h2, h3, h4, p, label, li, span,
+[data-testid="stMarkdownContainer"],
+[data-testid="stWidgetLabel"] {
+    color: var(--text) !important;
+}
+h1 {
+    font-size: clamp(1.6rem, 6vw, 2.3rem) !important;
+    line-height: 1.15 !important;
+    font-weight: 800 !important;
+    margin-bottom: .3rem !important;
+    padding-bottom: .55rem !important;
+    border-bottom: 3px solid var(--red);
+}
+h1 a { color: var(--text) !important; text-decoration: none !important; }
+h1 a:hover { color: var(--red) !important; }
+h4 {
+    font-size: clamp(.92rem, 3.2vw, 1.05rem) !important;
+    line-height: 1.45 !important;
+    font-weight: 500 !important;
+    color: var(--muted) !important;
+    margin-top: .2rem !important;
+}
+h3 {
+    font-size: clamp(1rem, 3.8vw, 1.2rem) !important;
+    line-height: 1.25 !important;
+    font-weight: 750 !important;
+    margin-top: 1.1rem !important;
+    padding-left: .65rem;
+    border-left: 4px solid var(--red);
+}
+[data-testid="stCaptionContainer"], small { color: var(--muted) !important; }
+
+/* ---------- Input ---------- */
+input, textarea { font-size: 16px !important; color: var(--text) !important; }
+[data-baseweb="input"], [data-baseweb="base-input"], [data-baseweb="select"] > div {
+    background: var(--panel-2) !important;
+    border-radius: var(--radius) !important;
+    border-color: var(--line) !important;
+}
+[data-baseweb="input"]:focus-within {
+    border-color: var(--red) !important;
+    box-shadow: 0 0 0 3px var(--red-soft) !important;
+}
+input::placeholder { color: #6b6b6b !important; }
+
+/* ---------- Radio ---------- */
+[data-testid="stRadio"] > div { gap: .5rem !important; flex-wrap: wrap; }
+[data-testid="stRadio"] label {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: .65rem .9rem !important;
+    min-height: 48px;
+    align-items: center;
+    flex: 1 1 240px;
+}
+[data-testid="stRadio"] label:has(input:checked) {
+    border-color: var(--red);
+    background: var(--red-soft);
+}
+[data-testid="stRadio"] [data-baseweb="radio"] > div:first-child { border-color: var(--red) !important; }
+[data-testid="stRadio"] input:checked + div { background-color: var(--red) !important; }
+
+/* ---------- Checkbox ---------- */
+[data-testid="stCheckbox"] label { min-height: 44px; align-items: center; }
+[data-testid="stCheckbox"] [data-baseweb="checkbox"] > span:first-child {
+    border-color: var(--red) !important;
+}
+[data-testid="stCheckbox"] input:checked + div,
+[data-testid="stCheckbox"] [aria-checked="true"] > span:first-child {
+    background-color: var(--red) !important;
+}
+
+/* ---------- Tombol ---------- */
+div[data-testid="stButton"] button,
+div[data-testid="stDownloadButton"] button {
+    width: 100%;
+    min-height: 52px;
+    font-size: 1rem;
+    font-weight: 800;
+    border-radius: var(--radius) !important;
+    transition: transform .08s ease, background .15s ease;
+}
+div[data-testid="stButton"] button:active { transform: scale(.98); }
+
+/* Mulai: merah solid */
+[data-testid="stHorizontalBlock"] > div:nth-child(1) div[data-testid="stButton"] button {
+    background: var(--red) !important;
+    border: 1px solid var(--red) !important;
+    color: #fff !important;
+}
+[data-testid="stHorizontalBlock"] > div:nth-child(1) div[data-testid="stButton"] button:hover:not(:disabled) {
+    background: #ff1e2b !important;
+}
+/* Hentikan: outline merah */
+[data-testid="stHorizontalBlock"] > div:nth-child(2) div[data-testid="stButton"] button {
+    background: transparent !important;
+    border: 2px solid var(--red) !important;
+    color: var(--red) !important;
+}
+[data-testid="stHorizontalBlock"] > div:nth-child(2) div[data-testid="stButton"] button:hover:not(:disabled) {
+    background: var(--red-soft) !important;
+}
+div[data-testid="stButton"] button:disabled {
+    background: #1a1a1a !important;
+    border-color: #2a2a2a !important;
+    color: #5a5a5a !important;
+}
+button:focus-visible, input:focus-visible {
+    outline: 2px solid var(--red) !important;
+    outline-offset: 2px;
+}
+
+/* ---------- Upload ---------- */
+[data-testid="stFileUploader"] { width: 100%; }
+[data-testid="stFileUploaderDropzone"] {
+    background: var(--panel) !important;
+    min-height: 88px;
+    padding: 14px !important;
+    border: 1.5px dashed var(--red-dark) !important;
+    border-radius: var(--radius) !important;
+}
+[data-testid="stFileUploaderDropzone"]:hover { border-color: var(--red) !important; }
+[data-testid="stFileUploaderDropzone"] [data-testid="stFileUploaderDropzoneInstructions"],
+[data-testid="stFileUploaderDropzone"] small { display: none !important; }
+[data-testid="stFileUploaderDropzone"]::after {
+    content: "📱 Pilih video dari galeri HP • Maks. 300 MB";
+    display: block;
+    margin-top: 5px;
+    font-size: .82rem;
+    line-height: 1.3;
+    color: var(--muted);
+    text-align: center;
+}
+[data-testid="stFileUploaderDropzone"] button {
+    background: var(--red) !important;
+    color: #fff !important;
+    border: none !important;
+}
+[data-testid="stFileUploaderFile"] { color: var(--text) !important; }
+
+/* ---------- Expander & alert ---------- */
+[data-testid="stExpander"] {
+    background: var(--panel) !important;
+    border: 1px solid var(--line) !important;
+    border-left: 4px solid var(--red) !important;
+    border-radius: var(--radius) !important;
+}
+[data-testid="stExpander"] summary { font-weight: 700; }
+[data-testid="stAlert"] {
+    background: var(--panel-2) !important;
+    border: 1px solid var(--line) !important;
+    border-radius: var(--radius) !important;
+}
+[data-testid="stAlert"] * { color: var(--text) !important; }
+
+/* ---------- Log ---------- */
+[data-testid="stText"], .stText {
+    background: var(--panel) !important;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--red);
+    border-radius: var(--radius);
+    padding: .75rem .9rem;
+    color: #ff6b73 !important;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+    font-size: .78rem !important;
+    line-height: 1.45;
+    max-height: 320px;
+    overflow: auto;
+    white-space: pre-wrap !important;
+    word-break: break-word;
+}
+
+/* ---------- Layout kolom ---------- */
+[data-testid="stHorizontalBlock"] { width: 100% !important; gap: .65rem !important; }
+[data-testid="stHorizontalBlock"] > div { min-width: 0 !important; }
+
+/* ---------- HP ---------- */
+@media (max-width: 640px) {
+    .block-container {
+        max-width: 100% !important;
+        padding: .65rem .65rem calc(2rem + env(safe-area-inset-bottom, 0px)) !important;
+    }
+    h1 { font-size: 1.5rem !important; }
+    h4 { font-size: .9rem !important; }
+    h3 { font-size: 1.05rem !important; }
+    [data-testid="stMarkdownContainer"] p,
+    [data-testid="stCaptionContainer"] { font-size: .9rem; }
+
+    /* Tombol aksi menjadi vertikal di HP */
+    [data-testid="stHorizontalBlock"]:has(div[data-testid="stButton"]) { flex-direction: column !important; }
+    [data-testid="stHorizontalBlock"]:has(div[data-testid="stButton"]) > div {
+        width: 100% !important;
+        flex: 1 1 100% !important;
+    }
+    div[data-testid="stButton"] button { min-height: 54px; }
+
+    [data-testid="stFileUploaderDropzone"] { min-height: 82px; padding: 10px !important; }
+    [data-testid="stRadio"] label { flex: 1 1 100%; }
+}
+
+@media (max-width: 380px) {
+    .block-container { padding-left: .45rem !important; padding-right: .45rem !important; }
+    h1 { font-size: 1.35rem !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+}
+</style>
+"""
+
+
 def main():
     st.set_page_config(
         page_title="STREMQU | YouTube Live Streaming",
@@ -201,164 +445,7 @@ def main():
         unsafe_allow_html=True,
     )
 
-    st.markdown(
-        """
-        <style>
-        /* =========================
-           STREMQU — RESPONSIVE UI
-           ========================= */
-        :root { --radius: 14px; }
-
-        .block-container {
-            width: 100% !important;
-            max-width: 920px !important;
-            margin: 0 auto !important;
-            padding: 1rem 1rem 2.5rem !important;
-        }
-
-        h1 {
-            font-size: clamp(1.65rem, 5vw, 2.25rem) !important;
-            line-height: 1.15 !important;
-            margin-bottom: .35rem !important;
-        }
-        h4 {
-            font-size: clamp(.95rem, 3vw, 1.1rem) !important;
-            line-height: 1.45 !important;
-            margin-top: 0 !important;
-        }
-        h2, h3 { line-height: 1.25 !important; }
-
-        /* Semua input nyaman disentuh di HP */
-        input, textarea, button,
-        [data-baseweb="select"] > div,
-        [data-testid="stFileUploaderDropzone"] {
-            border-radius: var(--radius) !important;
-        }
-
-        input, textarea { font-size: 16px !important; }
-
-        div[data-testid="stButton"] button,
-        div[data-testid="stDownloadButton"] button {
-            width: 100%;
-            min-height: 48px;
-            font-size: 1rem;
-            font-weight: 700;
-        }
-
-        /* Upload area */
-        [data-testid="stFileUploader"] {
-            width: 100%;
-        }
-        [data-testid="stFileUploaderDropzone"] {
-            min-height: 88px;
-            padding: 14px !important;
-            border: 1px dashed #9ca3af !important;
-        }
-        [data-testid="stFileUploaderDropzone"] [data-testid="stFileUploaderDropzoneInstructions"],
-        [data-testid="stFileUploaderDropzone"] small {
-            display: none !important;
-        }
-        [data-testid="stFileUploaderDropzone"]::after {
-            content: "📱 Pilih video dari galeri HP • Maks. 300 MB";
-            display: block;
-            margin-top: 5px;
-            font-size: .82rem;
-            line-height: 1.3;
-            color: #6b7280;
-            text-align: center;
-        }
-.source-title {
-            font-size: 1rem;
-            font-weight: 750;
-            line-height: 1.25;
-            margin-bottom: 8px;
-        }
-
-        .video-label {
-            min-height: 48px;
-            display: flex;
-            align-items: center;
-            font-size: .98rem;
-            font-weight: 700;
-            white-space: nowrap;
-        }
-
-        @media (max-width: 640px) {
-            .video-label {
-                min-height: 48px;
-                font-size: .9rem;
-            }
-            [data-testid="stHorizontalBlock"]:has(.video-label) {
-                flex-direction: row !important;
-                align-items: center !important;
-            }
-            [data-testid="stHorizontalBlock"]:has(.video-label) > div:first-child {
-                flex: 0 0 28% !important;
-                width: 28% !important;
-            }
-            [data-testid="stHorizontalBlock"]:has(.video-label) > div:last-child {
-                flex: 1 1 72% !important;
-                width: 72% !important;
-            }
-        }
-
-        /* Jangan biarkan kolom memaksa horizontal scroll */
-        [data-testid="stHorizontalBlock"] {
-            width: 100% !important;
-            gap: .65rem !important;
-        }
-        [data-testid="stHorizontalBlock"] > div {
-            min-width: 0 !important;
-        }
-
-        /* Expander / info / success lebih rapat */
-        [data-testid="stExpander"],
-        [data-testid="stAlert"] {
-            border-radius: var(--radius) !important;
-        }
-
-        @media (max-width: 640px) {
-            .block-container {
-                max-width: 100% !important;
-                padding: .65rem .55rem 2rem !important;
-            }
-
-            h1 { font-size: 1.55rem !important; }
-            h4 { font-size: .93rem !important; }
-            h2 { font-size: 1.2rem !important; }
-            h3 { font-size: 1.05rem !important; }
-
-            [data-testid="stMarkdownContainer"] p,
-            [data-testid="stCaptionContainer"] {
-                font-size: .9rem;
-            }
-/* Tombol aksi menjadi vertikal di HP */
-            [data-testid="stHorizontalBlock"]:has(div[data-testid="stButton"]) {
-                flex-direction: column !important;
-            }
-            [data-testid="stHorizontalBlock"]:has(div[data-testid="stButton"]) > div {
-                width: 100% !important;
-                flex: 1 1 100% !important;
-            }
-
-            div[data-testid="stButton"] button {
-                min-height: 50px;
-            }
-
-            [data-testid="stFileUploaderDropzone"] {
-                min-height: 82px;
-                padding: 10px !important;
-            }
-        }
-
-        @media (max-width: 380px) {
-            .block-container { padding-left: .4rem !important; padding-right: .4rem !important; }
-            h1 { font-size: 1.4rem !important; }
-        }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
+    st.markdown(THEME_CSS, unsafe_allow_html=True)
 
     st.markdown(
         '<h1><a href="https://www.youtube.com/@thexextsolutionid?sub_confirmation=1" target="_blank" style="text-decoration:none;">STREMQU MOBILE by TNS</a></h1>',
@@ -381,11 +468,11 @@ def main():
     if show_ads:
         components.html(
             """
-            <div style="background:#f0f2f6;padding:20px;border-radius:10px;text-align:center">
+            <div style="background:#141414;color:#9a9a9a;padding:20px;border-radius:14px;border:1px solid #2a2a2a;text-align:center;font-family:sans-serif">
                 <script type='text/javascript'
                         src='//pl26562103.profitableratecpm.com/28/f9/95/28f9954a1d5bbf4924abe123c76a68d2.js'>
                 </script>
-                <p style="color:#888">Iklan akan muncul di sini</p>
+                <p>Iklan akan muncul di sini</p>
             </div>
             """,
             height=300
@@ -496,4 +583,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
