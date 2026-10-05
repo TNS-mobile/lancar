@@ -264,19 +264,18 @@ input, textarea { font-size: 16px !important; color: var(--text) !important; }
 input::placeholder { color: #6b6b6b !important; }
 
 /* ---------- Radio ---------- */
-[data-testid="stRadio"] > div { gap: .5rem !important; flex-wrap: wrap; }
+[data-testid="stRadio"] > div { gap: .35rem 1.4rem !important; flex-wrap: wrap; }
 [data-testid="stRadio"] label {
-    background: var(--panel-2);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: .65rem .9rem !important;
-    min-height: 48px;
+    background: none;
+    border: none;
+    padding: 0 !important;
+    min-height: 40px;
     align-items: center;
-    flex: 1 1 240px;
 }
-[data-testid="stRadio"] label:has(input:checked) {
-    border-color: var(--red);
-    background: var(--red-soft);
+[data-testid="stRadio"] label p { font-size: .95rem; }
+[data-testid="stRadio"] label:has(input:checked) p {
+    color: var(--red-light) !important;
+    font-weight: 700;
 }
 [data-testid="stRadio"] [data-baseweb="radio"] > div:first-child { border-color: var(--red) !important; }
 [data-testid="stRadio"] input:checked + div { background-color: var(--red) !important; }
@@ -416,7 +415,7 @@ button:focus-visible, input:focus-visible {
     div[data-testid="stButton"] button { min-height: 54px; }
 
     [data-testid="stFileUploaderDropzone"] { min-height: 82px; padding: 10px !important; }
-    [data-testid="stRadio"] label { flex: 1 1 100%; }
+    [data-testid="stRadio"] > div { flex-direction: column !important; }
 }
 
 @media (max-width: 380px) {
