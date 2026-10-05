@@ -416,7 +416,7 @@ def main():
             uploaded_file = st.file_uploader(
                 f"Upload Video {slot}",
                 type=["mp4", "flv", "mov", "mkv", "webm"],
-                label_visibility="visible",
+                label_visibility="collapsed",
                 key=f"video_uploader_{slot}",
                 help="Maksimal 300 MB per video.",
             )
