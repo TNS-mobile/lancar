@@ -46,79 +46,6 @@ def save_uploaded_file(uploaded_file, slot: int) -> str:
     return str(path)
 
 
-def download_video_from_url(url: str, slot: int, filename_hint: str = "") -> str:
-    """Download video dari URL langsung atau Google Drive ke server."""
-    url = url.strip()
-    if not url:
-        raise ValueError("Link video kosong.")
-
-    parsed = urllib.parse.urlparse(url)
-    if parsed.scheme not in ("http", "https"):
-        raise ValueError("Link harus diawali http:// atau https://")
-
-    # Google Drive: gunakan gdown agar link sharing file dapat diunduh.
-    if "drive.google.com" in parsed.netloc or "docs.google.com" in parsed.netloc:
-        try:
-            import gdown
-        except ImportError as exc:
-            raise RuntimeError("Library gdown belum terpasang. Tambahkan gdown di requirements.txt.") from exc
-        hint = safe_filename(filename_hint or f"video_{slot}.mp4")
-        if not Path(hint).suffix:
-            hint += ".mp4"
-        target = UPLOAD_DIR / f"video_{slot}_drive_{hint}"
-        result = gdown.download(url=url, output=str(target), quiet=True, fuzzy=True)
-        if not result or not target.exists() or target.stat().st_size == 0:
-            raise RuntimeError("Google Drive gagal diunduh. Pastikan file disetel 'Anyone with the link'.")
-        if target.stat().st_size > 300 * 1024 * 1024:
-            try:
-                target.unlink()
-            except Exception:
-                pass
-            raise ValueError("Ukuran video melebihi batas maksimal 300 MB.")
-        return str(target)
-
-    # URL file langsung (MP4/MKV/WebM, dll).
-    hint = filename_hint.strip()
-    if not hint:
-        name = Path(urllib.parse.unquote(parsed.path)).name
-        hint = name or f"video_{slot}.mp4"
-    hint = safe_filename(hint)
-    if not Path(hint).suffix:
-        hint += ".mp4"
-    target = UPLOAD_DIR / f"video_{slot}_link_{hint}"
-
-    request = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-    with urllib.request.urlopen(request, timeout=60) as response, open(target, "wb") as out:
-        while True:
-            chunk = response.read(1024 * 1024)
-            if not chunk:
-                break
-            out.write(chunk)
-
-    if not target.exists() or target.stat().st_size == 0:
-        raise RuntimeError("Link tidak menghasilkan file video.")
-    if target.stat().st_size > 300 * 1024 * 1024:
-        try:
-            target.unlink()
-        except Exception:
-            pass
-        raise ValueError("Ukuran video melebihi batas maksimal 300 MB.")
-    return str(target)
-
-
-def save_uploaded_audio(uploaded_file, slot: int) -> str:
-    """Simpan MP3 berdasarkan slot agar urutan playlist selalu 1 -> 5."""
-    original = safe_filename(uploaded_file.name)
-    stem = Path(original).stem
-    suffix = Path(original).suffix.lower()
-    filename = f"audio_{slot}_{stem}{suffix}"
-    path = UPLOAD_DIR / filename
-    with open(path, "wb") as f:
-        f.write(uploaded_file.getbuffer())
-    return str(path)
-
-
-
 def make_concat_playlist(video_paths, repeat_count=1):
     """Buat playlist FFmpeg video sesuai jumlah slot, dengan jumlah putaran eksplisit."""
     playlist = UPLOAD_DIR / "playlist.txt"
@@ -389,92 +316,27 @@ def main():
 
     st.markdown("### 1. UPLOAD VIDEO / PLAYLIST")
     st.caption("Minimal 1 video • Maksimal 3 video • Video diputar berurutan dan otomatis Tanpa batas.")
-    st.info("Upload dari galeri HP, Link langsung, atau Google Drive. Maksimal 300 MB per video.")
+    st.info("📱 Upload video dari galeri HP • Maksimal 300 MB per video")
 
     selected_paths = []
 
     for slot in range(1, 4):
         st.markdown(f'<div class="mobile-card"><div class="source-title">🎬 Video {slot}</div></div>', unsafe_allow_html=True)
 
-        source = st.radio(
-            f"Sumber Video {slot}",
-            ["Upload dari galeri HP", "Link langsung", "Google Drive"],
-            horizontal=True,
-            key=f"playlist_video_source_{slot}",
+        uploaded_file = st.file_uploader(
+            f"Upload Video {slot} dari Galeri HP",
+            type=["mp4", "flv", "mov", "mkv", "webm"],
             label_visibility="collapsed",
+            key=f"video_uploader_{slot}",
+            help=f"Video {slot}. Maksimal 300 MB.",
         )
-
-        if source == "Upload dari galeri HP":
-            uploaded_file = st.file_uploader(
-                f"Pilih Video {slot}",
-                type=["mp4", "flv", "mov", "mkv", "webm"],
-                label_visibility="collapsed",
-                key=f"video_uploader_{slot}",
-                help=f"Video {slot}. Maksimal 300 MB.",
-            )
-            if uploaded_file is not None:
-                if uploaded_file.size > 300 * 1024 * 1024:
-                    st.error(f"Video {slot} melebihi batas 300 MB.")
-                else:
-                    saved = save_uploaded_file(uploaded_file, slot)
-                    st.session_state[f"playlist_video_path_{slot}"] = saved
-                    st.success(f"Video {slot} siap: {uploaded_file.name}")
-
-        elif source == "Link langsung":
-            video_url = st.text_input(
-                f"URL Video {slot}",
-                placeholder="https://contoh.com/video.mp4",
-                key=f"playlist_video_url_{slot}",
-                help="Gunakan direct link yang bisa diakses tanpa login.",
-            )
-            link_name = st.text_input(
-                "Nama file (opsional)",
-                placeholder=f"video_{slot}.mp4",
-                key=f"playlist_video_name_{slot}",
-            )
-            if st.button(f"⬇️ Ambil Video {slot}", key=f"playlist_download_link_{slot}", use_container_width=True):
-                if not video_url.strip():
-                    st.error(f"Masukkan URL Video {slot} terlebih dahulu.")
-                else:
-                    try:
-                        with st.spinner(f"Mengunduh Video {slot} ke server..."):
-                            saved = download_video_from_url(video_url, slot, link_name)
-                        st.session_state[f"playlist_video_path_{slot}"] = saved
-                        st.success(f"Video {slot} siap: {Path(saved).name}")
-                    except Exception as e:
-                        st.error(f"Gagal mengambil Video {slot}: {e}")
-
-        else:
-            drive_url = st.text_input(
-                f"Link Google Drive Video {slot}",
-                placeholder="https://drive.google.com/file/d/.../view?usp=sharing",
-                key=f"playlist_video_drive_url_{slot}",
-                help="File Google Drive harus dapat diakses dengan 'Anyone with the link'.",
-            )
-            drive_name = st.text_input(
-                "Nama file (opsional)",
-                placeholder=f"video_{slot}.mp4",
-                key=f"playlist_video_drive_name_{slot}",
-            )
-            if st.button(f"☁️ Ambil Video {slot}", key=f"playlist_download_drive_{slot}", use_container_width=True):
-                if not drive_url.strip():
-                    st.error(f"Masukkan link Google Drive Video {slot} terlebih dahulu.")
-                else:
-                    try:
-                        with st.spinner(f"Mengunduh Video {slot} dari Google Drive ke server..."):
-                            saved = download_video_from_url(drive_url, slot, drive_name)
-                        st.session_state[f"playlist_video_path_{slot}"] = saved
-                        st.success(f"Video {slot} siap: {Path(saved).name}")
-                    except Exception as e:
-                        st.error(f"Gagal mengambil Video {slot}: {e}")
-
-        candidates = sorted(
-            UPLOAD_DIR.glob(f"video_{slot}_*"),
-            key=lambda p: p.stat().st_mtime,
-            reverse=True,
-        )
-        if candidates:
-            st.session_state[f"playlist_video_path_{slot}"] = str(candidates[0])
+        if uploaded_file is not None:
+            if uploaded_file.size > 300 * 1024 * 1024:
+                st.error(f"Video {slot} melebihi batas 300 MB.")
+            else:
+                saved = save_uploaded_file(uploaded_file, slot)
+                st.session_state[f"playlist_video_path_{slot}"] = saved
+                st.success(f"Video {slot} siap: {uploaded_file.name}")
 
         selected = st.session_state.get(f"playlist_video_path_{slot}")
         if selected and Path(selected).exists():
