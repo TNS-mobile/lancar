@@ -348,7 +348,7 @@ def main():
     )
 
     st.markdown(
-        '<h1><a href="https://www.youtube.com/@thexextsolutionid?sub_confirmation=1" target="_blank" style="text-decoration:none;">STREMQU MOBILE by TNS</a></h1>',
+        '<h1><a href="https://www.youtube.com/@thexextsolutionid?sub_confirmation=1" target="_blank" style="text-decoration:none;">STREMQU by TNS</a></h1>',
         unsafe_allow_html=True
     )
     st.markdown(
@@ -378,7 +378,7 @@ def main():
         )
 
     st.markdown("### 1. UPLOAD VIDEO / PLAYLIST")
-    st.caption("Minimal 1 video • Maksimal 3 video • Video diputar berurutan dan otomatis Tanpa batas.")
+    st.caption("Minimal 1 video • Maksimal 3 video • Video diputar berurutan.")
     st.info("📱 Pilih video dari galeri HP • Maksimal 300 MB per video")
 
     selected_paths = []
@@ -427,7 +427,6 @@ def main():
     repeat_count = 1
     duration_hours = None
 
-    st.caption("♾️ DURASI STREAMING: Tanpa batas")
 
     log_placeholder = st.empty()
     logs = st.session_state.get("logs", [])
@@ -460,7 +459,7 @@ def main():
                 )
                 thread.start()
                 time.sleep(0.5)
-                st.success("Streaming dimulai ke YouTube — Tanpa batas!")
+                st.success("Streaming dimulai ke YouTube!")
 
     with col2:
         if st.button("⏹️ Hentikan Streaming", disabled=not streaming, use_container_width=True):
@@ -468,7 +467,7 @@ def main():
             st.warning("Streaming dihentikan!")
 
     if FFMPEG_PROCESS is not None and FFMPEG_PROCESS.poll() is None:
-        st.info("🔴 Streaming sedang berjalan • ♾️ Tanpa batas")
+        st.info("🔴 Streaming sedang berjalan")
 
     if st.session_state.get("logs"):
         log_placeholder.text("\n".join(st.session_state["logs"][-20:]))
