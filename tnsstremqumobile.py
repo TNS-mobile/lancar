@@ -371,9 +371,10 @@ def main():
 
     with st.expander("⚠️ DISCLAIMER", expanded=True):
         st.markdown("""
-        - Layanan gratis mengikuti kebijakan dan batasan penyedia hosting.
-        - Durasi streaming tergantung resource yang tersedia pada Streamlit.
-        - Tidak menjamin jumlah view, penonton, subscriber, atau hasil tertentu.
+        - Tools ini mengikuti kebijakan dan batasan penyedia layanan.
+        - Durasi streaming tergantung pada ukuran video dan kebijakan penyedia layanan.
+        - Tidak menjamin jumlah view, subscriber, atau hasil tertentu.
+        - Mohon gunakan layanan streaming gratis ini dengan bijak.
         """)
 
     show_ads = st.checkbox("📢 Tampilkan Iklan", value=False)
