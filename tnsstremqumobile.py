@@ -270,11 +270,11 @@ def main():
 
         .mobile-card {
             border: 1px solid #e5e7eb;
-            border-radius: 16px;
-            padding: 12px;
-            margin: 10px 0 14px;
+            border-radius: 14px;
+            padding: 10px 12px;
+            margin: 8px 0;
             background: rgba(255,255,255,.03);
-            box-shadow: 0 1px 5px rgba(0,0,0,.04);
+            box-shadow: 0 1px 4px rgba(0,0,0,.035);
         }
         .source-title {
             font-size: 1rem;
@@ -405,23 +405,27 @@ def main():
             height=300
         )
 
-    st.markdown("### Upload Video / Playlist")
-    st.caption("1–3 video • Maksimal 300 MB per video • Diputar berurutan")
+    st.markdown("### UPLOAD VIDEO / PLAYLIST")
+    st.caption("Minimal 1 video • Maksimal 3 video • Maks. 300 MB per video")
 
     selected_paths = []
 
     for slot in range(1, 4):
-        video_col, upload_col = st.columns([0.28, 0.72], gap="small")
-        with video_col:
-            st.markdown(f'<div class="video-label">🎬 Video {slot}</div>', unsafe_allow_html=True)
-        with upload_col:
-            uploaded_file = st.file_uploader(
-                f"Pilih Video {slot} dari Galeri HP",
-                type=["mp4", "flv", "mov", "mkv", "webm"],
-                label_visibility="collapsed",
-                key=f"video_uploader_{slot}",
-                help=f"Video {slot}. Maksimal 300 MB.",
-            )
+        with st.container():
+            st.markdown(f'<div class="mobile-card">', unsafe_allow_html=True)
+            video_col, upload_col = st.columns([0.30, 0.70], gap="small")
+            with video_col:
+                st.markdown(f'<div class="video-label">🎬 Video {slot}</div>', unsafe_allow_html=True)
+            with upload_col:
+                uploaded_file = st.file_uploader(
+                    "Upload dari Galeri HP",
+                    type=["mp4", "flv", "mov", "mkv", "webm"],
+                    label_visibility="collapsed",
+                    key=f"video_uploader_{slot}",
+                    help="Maksimal 300 MB per video.",
+                )
+            st.markdown('</div>', unsafe_allow_html=True)
+
         if uploaded_file is not None:
             if uploaded_file.size > 300 * 1024 * 1024:
                 st.error(f"Video {slot} melebihi batas 300 MB.")
@@ -449,7 +453,16 @@ def main():
         label_visibility="collapsed",
         placeholder="Masukkan Stream Key YouTube",
     )
-    is_shorts = st.checkbox("Mode Shorts (720x1280)")
+
+    st.markdown("### 3. TAMPILAN STREAMING")
+    display_mode = st.radio(
+        "Pilih tampilan streaming",
+        ["Mode Horizontal / Landscape (16:9)", "Mode Vertikal / Portrait / Shorts (9:16)"],
+        index=0,
+        horizontal=True,
+        label_visibility="collapsed",
+    )
+    is_shorts = display_mode.startswith("Mode Vertikal")
 
     # Streaming selalu Tanpa batas. Tidak ada menu jumlah pengulangan/durasi.
     playback_mode = "Tanpa batas"
