@@ -267,16 +267,7 @@ def main():
             color: #6b7280;
             text-align: center;
         }
-
-        .mobile-card {
-            border: 1px solid #e5e7eb;
-            border-radius: 14px;
-            padding: 10px 12px;
-            margin: 8px 0;
-            background: rgba(255,255,255,.03);
-            box-shadow: 0 1px 4px rgba(0,0,0,.035);
-        }
-        .source-title {
+.source-title {
             font-size: 1rem;
             font-weight: 750;
             line-height: 1.25;
@@ -341,13 +332,7 @@ def main():
             [data-testid="stCaptionContainer"] {
                 font-size: .9rem;
             }
-
-            .mobile-card {
-                padding: 10px;
-                margin: 8px 0 10px;
-            }
-
-            /* Tombol aksi menjadi vertikal di HP */
+/* Tombol aksi menjadi vertikal di HP */
             [data-testid="stHorizontalBlock"]:has(div[data-testid="stButton"]) {
                 flex-direction: column !important;
             }
@@ -411,16 +396,13 @@ def main():
     selected_paths = []
 
     for slot in range(1, 4):
-        with st.container():
-            st.markdown(f'<div class="mobile-card">', unsafe_allow_html=True)
-            uploaded_file = st.file_uploader(
-                f"Upload Video {slot}",
-                type=["mp4", "flv", "mov", "mkv", "webm"],
-                label_visibility="collapsed",
-                key=f"video_uploader_{slot}",
-                help="Maksimal 300 MB per video.",
-            )
-            st.markdown('</div>', unsafe_allow_html=True)
+        uploaded_file = st.file_uploader(
+            f"Upload Video {slot}",
+            type=["mp4", "flv", "mov", "mkv", "webm"],
+            label_visibility="collapsed",
+            key=f"video_uploader_{slot}",
+            help="Maksimal 300 MB per video.",
+        )
 
         if uploaded_file is not None:
             if uploaded_file.size > 300 * 1024 * 1024:
